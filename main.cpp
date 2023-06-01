@@ -1,56 +1,56 @@
-﻿#include "Organizm.h"
-#include "Organizmy.h"
+﻿#include "Organism.h"
+#include "Organisms.h"
 #include <conio.h>
 #include<stdio.h>
 #include <Windows.h>
 
 int main()
 {
-	Swiat* swiat = new Swiat(20, 10);
-	swiat->rysujSwiat();
+	World* world = new World(20, 10);
+	world->printWorld();
 	char x;
-	int kierunek;
+	int direction;
 	while (x = _getch()) {
 		switch (x)
 		{
 		case 0x48:
-			kierunek = 1;	//up
-			swiat->wykonajTure(kierunek);
+			direction = 1;	//up
+			world->handleTurn(direction);
 			break;
 		case 0x50:
-			kierunek = 2;	//down
-			swiat->wykonajTure(kierunek);
+			direction = 2;	//down
+			world->handleTurn(direction);
 			break;
 		case 0x4b:
-			kierunek = 3;	//left
-			swiat->wykonajTure(kierunek);
+			direction = 3;	//left
+			world->handleTurn(direction);
 			break;
 		case 0x4d:
-			kierunek = 4;	//right
-			swiat->wykonajTure(kierunek);
+			direction = 4;	//right
+			world->handleTurn(direction);
 			break;
 		case 'c':
-			swiat->rozpocznijCalopalenie();
+			world->startCalopalenie();
 			break;
 		case 's':
 			system("cls");
-			swiat->zapisz();
+			world->save();
 			break;
 		case 'l':
 			system("cls");
-			swiat->wczytaj();
+			world->load();
 			break;
 		case '\x0D': //enter
-			swiat->wykonajTure(0);
+			world->handleTurn(0);
 			break;
 		case 'q':
 			system("cls");
-			cout << "Symulacja zakonczona." << endl;
+			cout << "Symulation has ended." << endl;
 			return 0;
 		default:
 			break;
 		}
-		swiat->rysujSwiat();
+		world->printWorld();
 	}
-	swiat->~Swiat();
+	world->~World();
 }

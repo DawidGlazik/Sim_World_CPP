@@ -1,66 +1,66 @@
 #include "Guarana.h"
-#include "Pole.h"
+#include "Field.h"
 
 Guarana::Guarana() {
-	this->sila = 0;
-	this->wiek = 0;
+	this->strength = 0;
+	this->age = 0;
 }
 
-Guarana::Guarana(Swiat* swiat, Polozenie xy) {
-	this->swiat = swiat;
+Guarana::Guarana(World* world, coords xy) {
+	this->world = world;
 	this->xy = xy;
-	this->sila = 0;
-	this->wiek = 0;
+	this->strength = 0;
+	this->age = 0;
 }
 
-Guarana::Guarana(Swiat* swiat, Polozenie xy, int wiek) {
-	this->swiat = swiat;
+Guarana::Guarana(World* world, coords xy, int age) {
+	this->world = world;
 	this->xy = xy;
-	this->sila = 0;
-	this->wiek = wiek;
+	this->strength = 0;
+	this->age = age;
 }
 
-void Guarana::rysowanie() {
+void Guarana::print() {
 	cout << 'g';
 }
 
-void Guarana::sprawdzIZasiej(int x1, int y1) {
-	string komentarz;
-	if (dynamic_cast<Pole*>(this->swiat->plansza[this->xy.x + x1][this->xy.y + y1])) {
-		komentarz = "";
-		komentarz += "Zasiano ";
-		komentarz += this->getNazwa();
-		komentarz += "(";
-		komentarz += to_string(this->xy.x + x1 + 1);
-		komentarz += ",";
-		komentarz += to_string(this->xy.y + +y1 + 1);
-		komentarz += ")";
-		this->swiat->dziennik(komentarz);
-		this->swiat->dodajOrganizm(new Guarana(this->swiat, { this->xy.x + x1, this->xy.y + y1 }));
+void Guarana::checkAndSeed(int x1, int y1) {
+	string comment;
+	if (dynamic_cast<Field*>(this->world->board[this->xy.x + x1][this->xy.y + y1])) {
+		comment = "";
+		comment += "Seed ";
+		comment += this->getName();
+		comment += "(";
+		comment += to_string(this->xy.x + x1 + 1);
+		comment += ",";
+		comment += to_string(this->xy.y + +y1 + 1);
+		comment += ")";
+		this->world->log(comment);
+		this->world->addOrganism(new Guarana(this->world, { this->xy.x + x1, this->xy.y + y1 }));
 	}
 }
 
-void Guarana::kolizja(Organizm* org) {
-	string komentarz = "";
-	komentarz += org->getNazwa();
-	komentarz += org->getXY();
-	komentarz += " - sila rosnie o 3 po zjedzeniu ";
-	komentarz += this->getNazwa();
-	komentarz += this->getXY();
-	org->addSila(3);
-	swiat->dziennik(komentarz);
-	for (int i = 0; i < this->swiat->organizmy.size(); i++) {
-		if (this->swiat->organizmy[i]->getPolozenie().x == this->xy.x && this->swiat->organizmy[i]->getPolozenie().y == this->xy.y) {
-			this->swiat->organizmy.erase(this->swiat->organizmy.begin() + i);
+void Guarana::collision(Organism* org) {
+	string comment = "";
+	comment += org->getName();
+	comment += org->getXY();
+	comment += " - strength + 3 ";
+	comment += this->getName();
+	comment += this->getXY();
+	org->addStrength(3);
+	world->log(comment);
+	for (int i = 0; i < this->world->Organisms.size(); i++) {
+		if (this->world->Organisms[i]->getCoords().x == this->xy.x && this->world->Organisms[i]->getCoords().y == this->xy.y) {
+			this->world->Organisms.erase(this->world->Organisms.begin() + i);
 		}
 	}
-	swiat->plansza[this->xy.x][this->xy.y] = org;
-	swiat->plansza[org->getPolozenie().x][org->getPolozenie().y] = new Pole();
+	world->board[this->xy.x][this->xy.y] = org;
+	world->board[org->getCoords().x][org->getCoords().y] = new Field();
 	org->setX(this->xy.x);
 	org->setY(this->xy.y);
 }
 
-string Guarana::getNazwa() {
+string Guarana::getName() {
 	return "Guarana";
 }
 

@@ -1,15 +1,15 @@
 #pragma once
-#include "Roslina.h"
+#include "Plant.h"
 
-class Guarana :public Roslina {
+class Guarana :public Plant {
 protected:
-	void sprawdzIZasiej(int x1, int y1) override;
+	void checkAndSeed(int x1, int y1) override;
 public:
 	Guarana();
-	Guarana(Swiat* swiat, Polozenie xy);
-	Guarana(Swiat* swiat, Polozenie xy, int wiek);
-	void rysowanie() override;
-	void kolizja(Organizm*) override;
-	string getNazwa() override;
+	Guarana(World* world, coords xy);
+	Guarana(World* world, coords xy, int age);
+	void print() override;
+	void collision(Organism*) override;
+	string getName() override;
 	~Guarana();
 };
