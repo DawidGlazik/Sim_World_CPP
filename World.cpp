@@ -213,7 +213,7 @@ void World::save() {
 void World::load() {
 	fstream file;
 	string fileName;
-	cout << "Podaj nazwe fileu do odczytu: ";
+	cout << "Insert file name: ";
 	cin >> fileName;
 	file.open(fileName, ios::in);
 	if (file.good() == true)
